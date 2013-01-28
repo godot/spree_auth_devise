@@ -27,13 +27,15 @@ class Spree::UserSessionsController < Devise::SessionsController
         }
       end
     else
-      flash.now[:error] = t('devise.failure.invalid')
-      format.html {
-        render :new
-      }
-      format.js {
-        render :json => {:erros  => 'bad-credentials'}, status: 401
-      }
+      respond_to do |format|
+        format.html { 
+          flash.now[:error] = t('devise.failure.invalid')
+          render(action: 'new') 
+        }
+        format.js {
+          render :json => {:erros  => 'bad-credentials'}, status: 401
+        }
+      end
     end
   end
 
