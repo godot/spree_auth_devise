@@ -22,13 +22,18 @@ class Spree::UserSessionsController < Devise::SessionsController
           redirect_back_or_default(root_path)
         }
         format.js {
-          user = resource.record
-          render :json => {:ship_address => user.ship_address, :bill_address => user.bill_address}.to_json
+          user = current_user
+          render :json => {:ship_address => user.ship_address, :bill_address => user.bill_address}
         }
       end
     else
       flash.now[:error] = t('devise.failure.invalid')
-      render :new
+      format.html {
+        render :new
+      }
+      format.js {
+        render :json => {:erros  => 'bad-credentials'}, status: 401
+      }
     end
   end
 
@@ -43,12 +48,12 @@ class Spree::UserSessionsController < Devise::SessionsController
   end
 
   private
-    def accurate_title
-      t(:login)
-    end
+  def accurate_title
+    t(:login)
+  end
 
-    def redirect_back_or_default(default)
-      redirect_to(session["user_return_to"] || default)
-      session["user_return_to"] = nil
-    end
+  def redirect_back_or_default(default)
+    redirect_to(session["user_return_to"] || default)
+    session["user_return_to"] = nil
+  end
 end
