@@ -23,18 +23,22 @@ class Spree::UserSessionsController < Devise::SessionsController
         }
         format.js {
           user = current_user
-          render :json => {:ship_address => user.ship_address, :bill_address => user.bill_address}
+          render :json => {:ship_address => user.ship_address, :bill_address => user.bill_address}, content_type: 'application/json'
         }
       end
     else
       respond_to do |format|
-        format.html { 
+        format.html {
           flash.now[:error] = t('devise.failure.invalid')
-          render(action: 'new') 
+          render(action: 'new')
         }
         format.js {
-          render :json => {:erros  => 'bad-credentials'}, status: 401
+          render :json => {:errors  => 'bad-credentials'}, status: 401
         }
+        format.json {
+          render :json => {:errors  => 'bad-credentials'}, status: 401
+        }
+
       end
     end
   end
