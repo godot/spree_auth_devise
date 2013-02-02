@@ -20,7 +20,7 @@ module Spree
     end
 
     def spree_logout_path
-      spree.logout_path
+      spree.destroy_user_session_path
     end
   end
 end
