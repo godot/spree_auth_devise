@@ -28,7 +28,10 @@ class Spree::UserPasswordsController < Devise::PasswordsController
         format.js { }
       end
     else
-      respond_with_navigational(resource) { render :new }
+      respond_with(resource) do |format|
+        format.html { render :new }
+        format.js   { render partial: 'not_found' }
+      end
     end
   end
 
