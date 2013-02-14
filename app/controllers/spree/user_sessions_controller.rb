@@ -23,7 +23,7 @@ class Spree::UserSessionsController < Devise::SessionsController
         }
         format.js {
           user = current_user
-          render :json => {:ship_address => user.ship_address, :bill_address => user.bill_address}, content_type: 'application/json'
+          render :json => {user_return_to: session[:user_return_to], :ship_address => user.ship_address, :bill_address => user.bill_address}, content_type: 'application/json'
         }
       end
     else
